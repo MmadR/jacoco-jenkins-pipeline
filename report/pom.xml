@@ -27,32 +27,7 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <!--
-                    "report" goal can't cross boundaries of modules,
-                    while "report-aggregate" can, so let's use it, however
-                    by default it will load "jacoco.exec" from this module and from module "jar",
-                    so let's also change file name for this module to avoid intersection
-                    -->
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report-aggregate</goal>
-                        </goals>
-                        <configuration>
-                            <dataFileIncludes>**/jacoco.exec</dataFileIncludes>
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+
 
 
 </project>
