@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/types" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:include schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:complexType name="TXM_UserDataType">
+		<xs:annotation>
+			<xs:documentation>Field to be used to suit , by participants having bilateral agreements</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="Owner" type="TXM_AddressType">
+				<xs:annotation>
+					<xs:documentation>Specifies the user that defined  the data.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Data">
+				<xs:annotation>
+					<xs:documentation>Unrestricted user  data </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:any namespace="##any" processContents="lax" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

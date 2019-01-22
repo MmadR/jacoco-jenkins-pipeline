@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns="http://www.iata.org/txm/attachment" xmlns:txma="http://www.iata.org/txm/attachment" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/attachment" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:element name="TXM_Attachment">
+		<xs:annotation>
+			<xs:documentation>The TXM_Attachment contains detailed information to identify data attachments. </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Attachment" type="txma:AttachmentType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Provides details on how data are attached. If the data are attached by value, then these are contained in the Content tag.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+		<xs:unique name="cidUniqueKey">
+			<xs:selector xpath=".//Attachment"/>
+			<xs:field xpath="ContentId"/>
+		</xs:unique>
+	</xs:element>
+	<xs:complexType name="AttachmentType">
+		<xs:sequence>
+			<xs:element name="ContentId" type="txma:ContentIdType">
+				<xs:annotation>
+					<xs:documentation>Unique Identifier for the attachment (enforced by schema constraints).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Attached">
+				<xs:annotation>
+					<xs:documentation>Specifies if data are attached  by value or by reference.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="ByValue" type="xs:byte" fixed="0">
+							<xs:annotation>
+								<xs:documentation>Attachment contains data(emtpy tag).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ByReference">
+							<xs:annotation>
+								<xs:documentation>Attachment contains a reference to the data. When the message is constructed to be sent, the data will be injected in the attachment (i.e. the reference will be transformed into ByValue) only if the URI has the attribute isGlobalReference set to false or the reference is by filename; otherwise (i.e. the reference is by URI with the  isGlobalReference=true) the reference will be maintained.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="URI">
+										<xs:annotation>
+											<xs:documentation>Any resource. The required isGlobalReference must set to true if the URI is accessible by the targeted recipients; otherwise it must be false.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:anyURI">
+													<xs:attribute name="IsGlobalReference" type="xs:boolean" use="required">
+														<xs:annotation>
+															<xs:documentation>If true, this URI is accessible by the ultimate recipient, and thus the reference will remain. Otherwise, the reference is transformed into a ByValue attachment before sending the message.</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Filename" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>Filesystem absolute path</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Content" type="txmt:TxmContentType">
+				<xs:annotation>
+					<xs:documentation>User must specify the MIME  content type. If the data are attached by reference, then this tag is empty.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--  Various Supported Binary data types -->
+	<xs:simpleType name="ContentIdType">
+		<xs:annotation>
+			<xs:documentation>MIME content type</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:attribute name="TypeXAttachmentId" type="ContentIdType">
+		<xs:annotation>
+			<xs:documentation>Unique attachement identifier</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+</xs:schema>

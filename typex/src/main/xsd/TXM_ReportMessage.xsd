@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/report" xmlns:txmr="http://www.iata.org/txm/report" xmlns:txma="http://www.iata.org/txm/attachment" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/report" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/attachment" schemaLocation="TXM_Attachment.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:element name="TXM_Report">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+The TXM_Report  contains all the information related to a delivery notification or a special attention report.
+  </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReportType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Can be either 'DeliveryNotification' or 'SpecialAttention'.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:NMTOKEN">
+							<xs:enumeration value="DeliveryNotification"/>
+							<xs:enumeration value="SpecialAttention"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="ReportTime" type="xs:dateTime">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Timestamp of the report generation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OriginalMessageId" type="txmt:MessageUUIDType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">ID of the original message that is the subject of the report.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OriginalMessageDateTime" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">MessageDateTime field of the original message that is the subject of the report.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OriginalMessageReference" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Reference of the original message that is the subject of the report.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DeliveryNotificationInfo" type="DeliveryNotificationInfoType" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Element to describe delivery notification(s) corresponding to a single recipient. Present when ReportType='DeliveryNotification'.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Context" type="txmt:TxmContentType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contains an attachment that describes the context of the report, such as the original message or any pertinent information.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="DeliveryNotificationInfoType">
+		<xs:sequence>
+			<xs:element name="Status" type="txmt:StateType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Can be either 'Delivered' or 'Undelivered'.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StatusTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Timestamp of the event (delivery or rejection).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StatusReason" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Free text to describe the reason for the status.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Recipient" type="txmt:TXM_AddressType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Recipient for which this notification applies.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

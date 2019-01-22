@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txmt="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_UserData.xsd"/>
+	<xs:complexType name="TXM_RecipientInformationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Structure that defines a target node for a message and associated actons for the sending node.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ResponsibilityFlag" type="txmt:YesNoType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The ResponsibilityFlag field indicates to the TXM Receiver whether or not it is responsible to route the message towards the concerned destination.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActionType" type="txmt:CopyTargetType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The ActionType field indicates if the concerned address corresponds to a Primary Recipient, Copy Recipient or Blind Copy Recipient.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DestinationAddress" type="txmt:TXM_AddressType">
+				<xs:annotation>
+					<xs:documentation>Destination address of the message recipient.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Optional additional unconstrainted information that can be associated with the routing.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

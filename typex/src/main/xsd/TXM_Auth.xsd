@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/auth" xmlns:txmu="http://www.iata.org/txm/auth" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/auth" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_UserData.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:element name="TXM_AuthHeader">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+The TXM_AuthHeader contains all the information to identify the endpoints in an exchange between two adjacent nodes. This header is only used during message exchange, just as are the XSM, XATAP and Command header.
+  </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SenderId" type="txmt:TXM_AddressType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Defines the sender in a message exchange.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReceiverId" type="txmt:TXM_AddressType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Defines the receiver (adjacent node).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SessionId" default="1" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Contains the session number when several sessions are defined between the same pair (SenderId, ReceiverId). Default value=1.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SenderPassword" type="xs:base64Binary" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Encrypted password of sender</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

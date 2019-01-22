@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/fault" xmlns:txmf="http://www.iata.org/txm/fault" xmlns:txmt="http://www.iata.org/txm/types" xmlns:txma="http://www.iata.org/txm/attachment" targetNamespace="http://www.iata.org/txm/fault" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/attachment" schemaLocation="TXM_Attachment.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:element name="TXM_Fault">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+The TXM_Fault defines a TypeX error.
+  </xs:documentation>
+		</xs:annotation>
+		<!-- Definition of the RejectionType type -->
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">TypeX Fault reporting structure</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="FaultNode" type="txmt:TXM_AddressType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Address where the fault is triggered.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="InputMessage" type="txmt:TxmContentType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The entire message that was the source of the fault, specified as an attachment.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FaultDesc" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Description of the fault</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Code" type="TXM_CodeType">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">TXM code of the fault</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Reason" type="xs:string">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Textual description of the fault and probable reason.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CodeOwner" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>URI of the organization or service that maintains the error code specified in Code. Default is standard TypeX Code.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Detail" type="txmt:TxmContentType">
+								<xs:annotation>
+									<xs:documentation>Any details associated with the application error,specified as an attachment.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="UndeliveredAddress" type="txmt:TXM_AddressType" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Identifies the recipients that will not receive the rejected message.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="TXM_CodeType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="TXMFAULT-[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

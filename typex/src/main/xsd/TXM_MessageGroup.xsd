@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txmt="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:complexType name="TXM_GroupType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Identifiers for messages within a group.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LastMessageSequenceNumber">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Number of the last message in a group of messages (equals the number of messages in a group).</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:totalDigits value="12"/>
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MessageSequenceNumber">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Number of the message within a group  with possible values from 1  to LastMessageSequenceNumber.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:totalDigits value="12"/>
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MessageGroupId" type="txmt:AlphaNumericStringLength64">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Unique identifier for a group of messages.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

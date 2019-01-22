@@ -1,0 +1,51 @@
+<!-- An xsdconfig file must begin with a "config" element in the 
+        http://www.bea.com/2002/09/xbean/config namespace. Also, be sure
+        to declare any namespaces used to qualify types in your schema (here,
+        the namespace corresponding to the pol prefix. -->
+<xb:config xmlns:txm="http://www.iata.org/txm" 
+    xmlns:xb="http://www.bea.com/2002/09/xbean/config">
+
+    <!-- Use the "name space" element to map a name space to the Java package
+        name that should be generated. -->
+    <xb:namespace uri="http://www.iata.org/txm/envelope">
+        <xb:package>org.iata.txm.TXM2009A0.envelope</xb:package>
+    </xb:namespace>
+
+    <xb:namespace uri="http://www.iata.org/txm/command">
+        <xb:package>org.iata.txm.TXM2009A0.command</xb:package>
+    </xb:namespace>
+
+    <xb:namespace uri="http://www.iata.org/txm/fault">
+        <xb:package>org.iata.txm.TXM2009A0.fault</xb:package>
+    </xb:namespace>
+
+    <xb:namespace uri="http://www.iata.org/txm/msgheader">
+        <xb:package>org.iata.txm.TXM2009A0.msgheader</xb:package>
+    </xb:namespace>
+
+    <xb:namespace uri="http://www.iata.org/txm/session">
+        <xb:package>org.iata.txm.TXM2009A0.session</xb:package>
+    </xb:namespace>
+
+    <xb:namespace uri="http://www.iata.org/txm/xatap">
+        <xb:package>org.iata.txm.TXM2009A0.xatap</xb:package>
+    </xb:namespace>
+
+    <xb:namespace uri="http://www.iata.org/txm/auth">
+        <xb:package>org.iata.txm.TXM2009A0.auth</xb:package>
+    </xb:namespace>
+    
+    <xb:namespace uri="http://www.iata.org/txm/attachment">
+        <xb:package>org.iata.txm.TXM2009A0.attachment</xb:package>
+    </xb:namespace>   
+   
+    <xb:namespace uri="http://www.iata.org/txm/types">
+        <xb:package>org.iata.txm.TXM2009A0.types</xb:package>
+    </xb:namespace>  
+
+    <xb:namespace uri="http://www.iata.org/txm/report">
+        <xb:package>org.iata.txm.TXM2009A0.report</xb:package>
+    </xb:namespace> 
+
+</xb:config>
+	

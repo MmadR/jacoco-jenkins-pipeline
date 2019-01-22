@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:include schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:include schemaLocation="TXM_UserData.xsd"/>
+	<xs:complexType name="TXM_OriginatorType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Define the originator of  a message</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OriginatorAddress" type="txmt:TXM_AddressType">
+				<xs:annotation>
+					<xs:documentation>Specifies the address of the originator.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RejectTo" type="txmt:TXM_AddressType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Address where non-delivery reports should be sent. If not present, non-delivery reports will be sent to the originator.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

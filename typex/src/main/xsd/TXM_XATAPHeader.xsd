@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/xatap" xmlns:txmx="http://www.iata.org/txm/xatap" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/xatap" elementFormDefault="qualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+The TXM_XATAPHeader contains all the information to ensure delivery reliability.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="TXM_XATAPHeader">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The XATAP header can be used standalone to acknowledge a message of for dynamic configuration. If used in conjunction with a message header, then the context must be XATAP_SEND and the serial number is mandatory. In addition, if the context is XATAP_ACK, the serial number is mandatory. </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Context">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This defines the reason for the XATAP header. One of XATAP_ACK
+XATAP_SEND 
+XATAP_CONFIG</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:NMTOKEN">
+							<xs:enumeration value="XATAP_ACK"/>
+							<xs:enumeration value="XATAP_SEND"/>
+							<xs:enumeration value="XATAP_CONFIG"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SerialNumber" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Contains the XATAP Serial Number of the messages being acknowledged or sent. Mandatory only if context is XATAP_SEND</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PDM" type="txmt:YesNoType" default="No" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">indicate whether or not the message is being repeated due to a lack of acknowledgement. Use with context XATAP_SEND</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Config" type="txmt:XATAP_ConfigType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Contains parameters for the configuration of XATAP</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:include schemaLocation="TXM_MessageGroup.xsd"/>
+	<xs:include schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:include schemaLocation="TXM_UserData.xsd"/>
+	<xs:include schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Various Data  associated with a message</xs:documentation>
+	</xs:annotation>
+	<!-- Definition of the MessageDefifnition type -->
+	<xs:complexType name="TXM_MessageInformationType">
+		<xs:sequence>
+			<xs:element name="MessageId" type="txmt:MessageUUIDType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Unique identifier provided either by the originator or the initial TXM sender.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MessageReference" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Originator reference to this message (free text).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MessageDateTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Timestamp of origin.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InReplyTo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Contains the MessageReference of the message this message replies to (used in request/response MEPs).</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CorrectVersion" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Contains the MessageReference of  the corrected message.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="DeliveryNotificationRequest" type="txmt:YesNoType" default="No" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Boolean to indicate the need for an explicit delivery notification.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ExpirationTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Date and time at which delivery can be abandonned. Default is no expiration.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LifeTimeDays" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Specifies the number of days to archive the message after processing or its expiration. The default is permanent storage (at least until purge).</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Group" type="txmt:TXM_GroupType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Identifies a message as being part of a group of messages.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PossibleDuplicateMessage" type="txmt:YesNoType" default="No" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Boolean to indicate if this message is a possible duplicate message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Priority" default="2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Indicator of processing priority (0 is highest, 3 is lowest). For a given priority, messages are processed by the receiver in a FIFO manner.Default is 2.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RepeatedMessageId" type="txmt:MessageUUIDType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Provide the original MessageId for this repeated message by the Repeat command.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SpecialAttentionNotification" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+Usually used in messages concerning the safety of human life or in aircraft accident. The field indicates the type of special treatment to be applied to the message, depending on its value (0,1 or 2). If equal to 0 (default value), no special handling is required.
+ </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Subject" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Subject of the message</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="256"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="DoubleSignature" type="txmt:TXM_AddressType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Designate third party billiing address for this message transport.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReliabilityLevel" default="2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Specifies the reliability required by this message.
+Level 2: reliable message (stored and acked)
+Level 1: not stored, acked, can be lost
+Level 0:  not stored, not acked, can be lost</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

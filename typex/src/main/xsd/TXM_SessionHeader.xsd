@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txms="http://www.iata.org/txm/session" xmlns="http://www.iata.org/txm/session" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/session" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_UserData.xsd"/>
+	<xs:element name="TXM_SessionHeader">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+The TXM_SessionHeader contains all the information to manage permanent sessions between two adjacent nodes. Its intended purpose is to better manage traffic flow.
+  </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Command">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Command issued by the session manager.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="Open">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Open a new session with value "PermanentOneWay" , "PermanentTwoWay", "DualPermanentOneWay" or "NonPermanent".</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:NMTOKEN">
+										<xs:enumeration value="PermanentOneWay"/>
+										<xs:enumeration value="PermanentTwoWay"/>
+										<xs:enumeration value="NonPermanent"/>
+										<xs:enumeration value="DualPermanentOneWay"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="OpenConfirm">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Response to an Open command. Possible values are "OK", "UnknownSender", "UnsupportedType", "Disabled", "AlreadyOpen".</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:NMTOKEN">
+										<xs:enumeration value="OK"/>
+										<xs:enumeration value="UnknownSender"/>
+										<xs:enumeration value="UnsupportedType"/>
+										<xs:enumeration value="Disabled"/>
+										<xs:enumeration value="AlreadyOpen"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Close">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Request to close a session with the following possible values: "NoTraffic", "NoStatusResponse", "Disable".</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:NMTOKEN">
+										<xs:enumeration value="NoStatusResponse"/>
+										<xs:enumeration value="NoTraffic"/>
+										<xs:enumeration value="Disable"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="StatusQuery" type="xs:byte" fixed="0">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Command to ensure that the other node is still participating in the session. (empty tag)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="StatusResponse" type="xs:byte" fixed="0">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Response to the StatusQuery command (empty tag).</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

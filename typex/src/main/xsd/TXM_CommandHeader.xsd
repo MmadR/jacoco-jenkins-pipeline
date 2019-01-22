@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/command" xmlns:txmc="http://www.iata.org/txm/command" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/command" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:element name="TXM_CommandHeader">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+The TXM_CommandHeader contains all the information to issue a command from one node to another to request an action.
+  </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Command">
+					<xs:annotation>
+						<xs:documentation>Command issued by a node.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="RepeatRequest" type="TXM_RepeatCriteriaType">
+								<xs:annotation>
+									<xs:documentation>Request to re-transmit messages already sent or received.  </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="RepeatResponse">
+								<xs:annotation>
+									<xs:documentation>Response to a request to re-transmit messages.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="NumRepeatedMsg">
+											<xs:annotation>
+												<xs:documentation>The number of messages that will be repeated.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:minInclusive value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="RepeatRequest" type="TXM_RepeatCriteriaType">
+											<xs:annotation>
+												<xs:documentation>The original repeat request.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="FlowRequest" type="txmt:FlowType">
+								<xs:annotation>
+									<xs:documentation>Used to stop or resume sending messages towards the node issuing the command. </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FlowResponse" type="txmt:FlowType">
+								<xs:annotation>
+									<xs:documentation>Response to a flow request. Echo the requested flows.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="TXM_RepeatCriteriaType">
+		<xs:annotation>
+			<xs:documentation>Specify constraints for repeated messages</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RepeatFromTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Repeat messages starting at this time (sent or received). </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RepeatToTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Repeat messages up to at this time (sent or received). </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RepeatMaxNumMsg" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Maximum number of messages to be repeated.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:choice minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Filter messages to repeat by  address type or a specific address.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="RepeatOriginatorAddressType" type="txmt:AllowedAddressType">
+					<xs:annotation>
+						<xs:documentation>Repeat messages where the originator has this type of sub-address.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RepeatOriginatorAddress" type="txmt:TXM_AddressType">
+					<xs:annotation>
+						<xs:documentation>Repeat messages with this originator address.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:choice minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Filter messages to repeat by message IDs or references, as defined in the Information section of a message header.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="RepeatMessageId" type="txmt:MessageUUIDType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>MessageId(s) to repeat; the MessageId is defined in the message header information section.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RepeatMessageReference" type="xs:string" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>MessageReference(s) to repeat; the MessageReference is defined in the message header information section.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

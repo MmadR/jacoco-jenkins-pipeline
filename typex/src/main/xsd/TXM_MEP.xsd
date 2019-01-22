@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:include schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:include schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:include schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:complexType name="TXM_MEP_Header">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+The TXM_MEP_Header contains all the information pertaining to an end-to-end exchange pattern between two nodes.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">This switch allows to specify the current context and type of MEP.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="SendReceive" type="xs:byte" nillable="true">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Identifies a two-way message (specified only by the client); a synchronous response is expected. (empty tag)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SendCallback">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Identifies the request phase of an asynchronous request/response (specified only by the client). The response is provided via a callback.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ConversationId" type="txmt:ConversationIdType">
+								<xs:annotation>
+									<xs:documentation>Uniquely identifies a conversation.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Phase">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">This field defines the state of the conversation; one of start, continue or finish.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:NMTOKEN">
+										<xs:enumeration value="continue"/>
+										<xs:enumeration value="finish"/>
+										<xs:enumeration value="start"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CallbackLocation" type="txmt:TXM_AddressType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">This is the location where the response should be addressed. Normally this will be to the Originator of the message.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ReceiveCallback">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Identifies the response phase of an asynchronous request/response (specified only by the server). The response is provided via a callback.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ConversationId" type="txmt:ConversationIdType">
+								<xs:annotation>
+									<xs:documentation>Uniquely identifies a conversation.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Phase">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">This field defines the state of the conversation; one of continue or finish.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:NMTOKEN">
+										<xs:enumeration value="continue"/>
+										<xs:enumeration value="finish"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FireAndForget" type="xs:byte" nillable="true">
+					<xs:annotation>
+						<xs:documentation xml:lang="en"> This is the default behavior: Identifies a one-way message (specified only by the client); a response is not expected.(empty tag)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ReceiveTerminate">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Identifies a notification from the server that a response will not be provided as expected (specified only by the server). No further exchanges are possible with this conversationId (i.e the conversation has ended).</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ConversationId" type="txmt:ConversationIdType">
+								<xs:annotation>
+									<xs:documentation>Uniquely identifies a conversation.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Reason" type="xs:string">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Free text reason for termination</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="MEP_Config" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Configuration parameters for  a conversation.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MaxResponseDelay">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Maximum time (seconds) to respond in a request/response exchange. The default value is 2^32.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:long">
+									<xs:minInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MaxIdleTime">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">For conversations, the maximum time (seconds) between exchanges in a conversation.The default value is 2^32.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:long">
+									<xs:minInclusive value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConversationIdType">
+		<xs:annotation>
+			<xs:documentation>Identifies uniquely a conversation</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InitiatorId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Value set by the initiator of the conversation. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RecipientId" type="xs:string" default="TXM _VOID">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Value set by the receiving participant.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ConversationStateType">
+		<xs:annotation>
+			<xs:documentation>Defines the possible states of a conversation</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="continue"/>
+			<xs:enumeration value="finish"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

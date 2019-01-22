@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txme="http://www.iata.org/txm/envelope" xmlns:txms="http://www.iata.org/txm/session" xmlns:txmm="http://www.iata.org/txm/msgheader" xmlns:txmc="http://www.iata.org/txm/command" xmlns:txmx="http://www.iata.org/txm/xatap" xmlns:txmf="http://www.iata.org/txm/fault" xmlns:txmr="http://www.iata.org/txm/report" xmlns:txmu="http://www.iata.org/txm/auth" xmlns:txma="http://www.iata.org/txm/attachment" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/envelope" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:import namespace="http://www.iata.org/txm/types" schemaLocation="TXM_CommonTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/msgheader" schemaLocation="TXM_MessageHeader.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/xatap" schemaLocation="TXM_XATAPHeader.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/session" schemaLocation="TXM_SessionHeader.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/fault" schemaLocation="TXM_Fault.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/command" schemaLocation="TXM_CommandHeader.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/attachment" schemaLocation="TXM_Attachment.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/report" schemaLocation="TXM_ReportMessage.xsd"/>
+	<xs:import namespace="http://www.iata.org/txm/auth" schemaLocation="TXM_Auth.xsd"/>
+	<xs:element name="TXM_Envelope">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Describes a standalone TXM Message</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TXM_Header">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Metadata of the message to enable routing, reliability, etc...</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="txmu:TXM_AuthHeader" minOccurs="0"/>
+							<xs:choice minOccurs="0">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Either a session message, a command, XATAP or a message exchange.</xs:documentation>
+								</xs:annotation>
+								<xs:element name="TXM_BodyHeader">
+									<xs:annotation>
+										<xs:documentation>This header is mandatory if and only if TXM_Body is not empty.</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:annotation>
+												<xs:documentation xml:lang="en">Elements to transport messages.</xs:documentation>
+											</xs:annotation>
+											<xs:element ref="txmm:TXM_MessageHeader"/>
+											<xs:element ref="txmx:TXM_XATAPHeader" minOccurs="0"/>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element ref="txms:TXM_SessionHeader"/>
+								<xs:element ref="txmc:TXM_CommandHeader"/>
+								<xs:element ref="txmx:TXM_XATAPHeader"/>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TXM_Body">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Contains either the payload or a fault.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice minOccurs="0">
+							<xs:element name="TXM_Payload">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Any payload</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:any namespace="##any" processContents="lax" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:anyAttribute namespace="##other" processContents="lax"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element ref="txmf:TXM_Fault"/>
+							<xs:element ref="txmr:TXM_Report"/>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="txma:TXM_Attachment" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="TxmRelease" type="txmt:IdType" use="required">
+				<xs:annotation>
+					<xs:documentation>Version Release identitfier</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

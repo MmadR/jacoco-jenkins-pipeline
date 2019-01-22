@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:txmt="http://www.iata.org/txm/types" targetNamespace="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:include schemaLocation="TXM_Routing.xsd"/>
+	<xs:include schemaLocation="TXM_SimpleTypes.xsd"/>
+	<xs:include schemaLocation="TXM_UserData.xsd"/>
+	<!-- Definition of the RecipientType type -->
+	<xs:complexType name="TXM_DestinationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en"> Definition of the Recipient List, messaging action and routing flag.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RecipientInformation" type="txmt:TXM_RecipientInformationType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Information related to the recipient.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NodeTrace">
+				<xs:annotation>
+					<xs:documentation>Contains a list of nodes that route this message. This is used for looping detection. If a node treats a message already containing its ID, then the message is looping.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TraceInfo" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="NodeId">
+										<xs:annotation>
+											<xs:documentation>Identifier for the node treating a message. This identifier is not constrained in  content; notably it does no have to be its TypeX address.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="32"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="TimeStamp" type="xs:dateTime" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Date time of the trace info</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Any data </xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UserData" type="txmt:TXM_UserDataType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

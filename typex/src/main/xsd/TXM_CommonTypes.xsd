@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/txm/types" xmlns:txmt="http://www.iata.org/txm/types" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" targetNamespace="http://www.iata.org/txm/types" elementFormDefault="unqualified" version="1.000" id="TXM2009A0">
+	<xs:include schemaLocation="TXM_AddressTypes.xsd"/>
+	<xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="xmlmime.xsd"/>
+	<xs:simpleType name="FlowIndicator">
+		<xs:annotation>
+			<xs:documentation>Either Stop or GoAhead (i.e. resume)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="Stop"/>
+			<xs:enumeration value="GoAhead"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="FlowType">
+		<xs:annotation>
+			<xs:documentation>Used to stop or resume sending messages towards the node issuing the command;  the flow cotrol id applicable to each possible message priority.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FlowImmediatePriority" type="FlowIndicator">
+				<xs:annotation>
+					<xs:documentation>Highest priority</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlowHighPriority" type="FlowIndicator">
+				<xs:annotation>
+					<xs:documentation>Second highest priority</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlowMediumPriority" type="FlowIndicator">
+				<xs:annotation>
+					<xs:documentation>Third highest priority</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FlowLowPriority" type="FlowIndicator">
+				<xs:annotation>
+					<xs:documentation>Lowest priority</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Reusable complex types</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="ErrorType">
+		<xs:annotation>
+			<xs:documentation> Describes an error.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ErrorCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Used to identify an application error by a code.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ErrorSubCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used to identify an application error by a sub-code.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ErrorText" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Used to identify an application error by description or text.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="VersionType">
+		<xs:annotation>
+			<xs:documentation> Defines a schema version</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[1-9][0-9]{0,1}\.[0-9]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en"> Defines the release:subrealease of a schema</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="TXM2[0-9]{3}[A-Z][0-9]"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="MessageUUIDType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines a unique message identifier</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TypeXAddress" type="txmt:TXM_AddressType">
+				<xs:annotation>
+					<xs:documentation>Service address of the application or mailbox that generates the message. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OriginDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>UTC date when the message was originated.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OriginTime" type="xs:time">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">UTC time when the message was originated</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Number">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Unique number for the address and originDate/Time.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="StateType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines possible values for the state of a message (e.g. delivered)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="DeliveryTransit"/>
+			<xs:enumeration value="Delivered"/>
+			<xs:enumeration value="Undelivered"/>
+			<xs:enumeration value="ReturnTransit"/>
+			<xs:enumeration value="Returned"/>
+			<xs:enumeration value="Unreturned"/>
+			<xs:enumeration value="Dead"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="XATAP_ConfigType">
+		<xs:annotation>
+			<xs:documentation>Defines the configuration parameters for XATAP</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MaxAckDelay" default="30">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Maximum time (seconds) the sender will wait for an acknowledgment.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MaxNumDeferredMsg" default="1">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Maximum number of messages for which the sender is accepting deferred acks.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TypeXBinaryDataType">
+		<xs:annotation>
+			<xs:documentation> Defines base64 encoded data (uses xmlmime.xsd)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="xmime:base64Binary">
+				<xs:attribute ref="xmime:contentType" use="required"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="TxmContentType">
+		<xs:annotation>
+			<xs:documentation> Convenience structure to define content as either binary(unknown format) or XML.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Binary" type="TypeXBinaryDataType">
+				<xs:annotation>
+					<xs:documentation>Content is not XML. The MIME type should indicate the nature of the content.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Xml">
+				<xs:annotation>
+					<xs:documentation>XML Content</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:any namespace="##any" processContents="skip" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+</xs:schema>
