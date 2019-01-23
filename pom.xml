@@ -58,7 +58,7 @@
                         </rule>
                     </rules>
                     <excludes>
-                        <exclude>org.iata.txm</exclude>
+                        <exclude>org.iata.txm.**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
