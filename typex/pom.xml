@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jacoco-jenkins-pipeline</artifactId>
         <groupId>mmadr</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,8 @@
 
     <properties>
         <!-- This module is all about generated code, so lets tell Jacoco to not run code coverage here -->
-        <jacoco.skip>true</jacoco.skip>
+        <sonar.skip>true</sonar.skip>
+
     </properties>
 
     <dependencies>
